@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter} from "next/navigation";
 import { ArrowRight, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,10 +10,14 @@ import { useJoinMeeting } from "@/hooks/useMeetings";
 
 export default function JoinMeetingForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const presetMeetingId = searchParams.get("meeting") || "";
+  const [meetingId, setMeetingId] = useState("");
 
-  const [meetingId, setMeetingId] = useState(presetMeetingId);
+  useEffect(() => {
+  if (typeof window === "undefined") return;
+  const params = new URLSearchParams(window.location.search);
+  const presetMeetingId = params.get("meeting") || "";
+  setMeetingId(presetMeetingId);
+  }, []);
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
 
