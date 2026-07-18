@@ -1,0 +1,86 @@
+# ==========================
+# Node.js / Next.js
+# ==========================
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# ==========================
+# Python
+# ==========================
+venv/
+.venv/
+env/
+ENV/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python build files
+*.egg-info/
+.eggs/
+build/
+dist/
+pip-wheel-metadata/
+
+# ==========================
+# Database
+# ==========================
+*.db
+*.sqlite
+*.sqlite3
+
+# ==========================
+# IDE / Editors
+# ==========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================
+# Operating System
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Coverage & Testing
+# ==========================
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+
+# ==========================
+# TypeScript
+# ==========================
+*.tsbuildinfo
+
+# ==========================
+# Miscellaneous
+# ==========================
+*.log
+*.tmp
+*.temp
+
+# ==========================
+# Package manager caches
+# ==========================
+.npm/
+.pnpm-store/
+.yarn/
