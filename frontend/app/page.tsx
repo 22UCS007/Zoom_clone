@@ -1,29 +1,49 @@
 "use client";
 
-import { useState } from "react";
-import Navbar from "@/components/Navbar";
-import ActionCards from "@/components/ActionCards";
-import MeetingLists from "@/components/MeetingLists";
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import MeetingRoom from "@/components/MeetingRoom";
+import { meetingApi } from "@/services/api";
 
-export default function HomePage() {
-  const [userName] = useState("User");
+export default function JoinPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const meetingId = searchParams.get("meeting");
+  const displayName = searchParams.get("name") || "Guest";
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-            Welcome to ZoomClone
-          </h1>
-          <p className="text-gray-500 text-base">
-            Video meetings for everyone. Get started by creating or joining a meeting.
-          </p>
-        </div>
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-        <ActionCards userName={userName} />
-        <MeetingLists />
-      </main>
-    </div>
-  );
+  useEffect(() => {
+    if (!meetingId) {
+      setError("Meeting ID is missing.");
+      setLoading(false);
+      return;
+    }
+
+    const join = async () => {
+      try {
+        await meetingApi.joinMeeting({
+          meeting_id: meetingId,
+          display_name: displayName,
+        });
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to join the meeting.");
+        setLoading(false);
+      }
+    };
+
+    join();
+  }, [meetingId, displayName]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Joining meeting...</div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center text-red-600">{error}</div>;
+  }
+
+  return <MeetingRoom meetingId={meetingId} displayName={displayName} isHost={false} />;
 }
