@@ -1,14 +1,13 @@
 "use client";
 
-import { use } from "react";
 import MeetingRoom from "@/components/MeetingRoom";
 
 interface MeetingPageProps {
-  params: Promise<{ meetingId: string }>;
+  params: { meetingId: string };
 }
 
 export default function MeetingPage({ params }: MeetingPageProps) {
-  const { meetingId } = use(params);
+  const meetingId = params.meetingId;
 
   return (
     <MeetingRoom
