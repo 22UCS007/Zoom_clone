@@ -9,7 +9,8 @@ export default function JoinPage() {
   const searchParams = useSearchParams();
   const meetingId = searchParams.get("meeting");
   const displayName = searchParams.get("name") || "Guest";
-  const [status, setStatus] = useState<"loading" | "error" | "ready">("loading");
+
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function JoinPage() {
       return;
     }
 
-    const join = async () => {
+    const joinMeeting = async () => {
       try {
         await meetingApi.joinMeeting({
           meeting_id: meetingId,
@@ -27,12 +28,12 @@ export default function JoinPage() {
         });
         setStatus("ready");
       } catch {
-        setError("Failed to join the meeting. Please try again.");
+        setError("Failed to join the meeting.");
         setStatus("error");
       }
     };
 
-    join();
+    joinMeeting();
   }, [meetingId, displayName]);
 
   if (status === "loading") {
@@ -51,7 +52,5 @@ export default function JoinPage() {
     );
   }
 
-  return (
-    <MeetingRoom meetingId={meetingId!} displayName={displayName} isHost={false} />
-  );
+  return <MeetingRoom meetingId={meetingId!} displayName={displayName} isHost={false} />;
 }
