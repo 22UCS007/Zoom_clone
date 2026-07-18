@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import MeetingPage from "./MeetingPage";
 
-export default function Page({ params }: { params: { meetingId: string } }) {
+export default function Page({ params }: { params: Promise<{ meetingId: string }> }) {
   return (
     <Suspense
       fallback={
