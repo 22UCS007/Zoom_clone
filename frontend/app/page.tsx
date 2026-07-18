@@ -1,23 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import MeetingRoom from "@/components/MeetingRoom";
 import { meetingApi } from "@/services/api";
 
 export default function JoinPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const meetingId = searchParams.get("meeting");
   const displayName = searchParams.get("name") || "Guest";
-
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<"loading" | "error" | "ready">("loading");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!meetingId) {
       setError("Meeting ID is missing.");
-      setLoading(false);
+      setStatus("error");
       return;
     }
 
@@ -27,23 +25,33 @@ export default function JoinPage() {
           meeting_id: meetingId,
           display_name: displayName,
         });
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to join the meeting.");
-        setLoading(false);
+        setStatus("ready");
+      } catch {
+        setError("Failed to join the meeting. Please try again.");
+        setStatus("error");
       }
     };
 
     join();
   }, [meetingId, displayName]);
 
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Joining meeting...</div>;
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-600">Joining meeting...</p>
+      </div>
+    );
   }
 
-  if (error) {
-    return <div className="min-h-screen flex items-center justify-center text-red-600">{error}</div>;
+  if (status === "error") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
   }
 
-  return <MeetingRoom meetingId={meetingId} displayName={displayName} isHost={false} />;
+  return (
+    <MeetingRoom meetingId={meetingId!} displayName={displayName} isHost={false} />
+  );
 }
