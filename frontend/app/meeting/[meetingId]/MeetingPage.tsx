@@ -1,7 +1,6 @@
 "use client";
 
 import { use } from "react";
-import { useSearchParams } from "next/navigation";
 import MeetingRoom from "@/components/MeetingRoom";
 
 interface MeetingPageProps {
@@ -10,13 +9,11 @@ interface MeetingPageProps {
 
 export default function MeetingPage({ params }: MeetingPageProps) {
   const { meetingId } = use(params);
-  const searchParams = useSearchParams();
-  const displayName = searchParams.get("name") || "Guest";
 
   return (
     <MeetingRoom
       meetingId={meetingId}
-      displayName={displayName}
+      displayName="Guest"
       isHost={false}
     />
   );
