@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,24 +10,19 @@ import { useJoinMeeting } from "@/hooks/useMeetings";
 
 export default function JoinMeetingForm() {
   const router = useRouter();
-  const [meetingId, setMeetingId] = useState("");
 
-  useEffect(() => {
-  if (typeof window === "undefined") return;
-  const params = new URLSearchParams(window.location.search);
-  const presetMeetingId = params.get("meeting") || "";
-  setMeetingId(presetMeetingId);
-  }, []);
+  const [meetingId, setMeetingId] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
 
   const joinMeeting = useJoinMeeting();
 
   useEffect(() => {
-    if (presetMeetingId) {
-      setMeetingId(presetMeetingId);
-    }
-  }, [presetMeetingId]);
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const preset = params.get("meeting") || "";
+    if (preset) setMeetingId(preset);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
